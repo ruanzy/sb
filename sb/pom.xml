@@ -25,6 +25,11 @@
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 		</dependency>
+		<dependency>
+		    <groupId>com.jfinal</groupId>
+		    <artifactId>enjoy</artifactId>
+		    <version>3.3</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
