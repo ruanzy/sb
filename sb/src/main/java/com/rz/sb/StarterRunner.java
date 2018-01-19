@@ -15,14 +15,19 @@ public class StarterRunner implements CommandLineRunner {
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
-	public void run(String... arg0) throws Exception {
-		String sql = "SELECT COUNT(1) FROM  information_schema.tables where table_schema='PUBLIC' and table_name='USERS'";
-		Integer c = jdbcTemplate.queryForObject(sql, Integer.class);
-		if (c == 0) {
-			DataSource ds = jdbcTemplate.getDataSource();
-			ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
-			populator.addScript(new ClassPathResource("init.sql"));
-			populator.populate(ds.getConnection());
+	@TargetDataSource("d1")
+	public void run(String... arg0) {
+		try {
+			String sql = "SELECT COUNT(1) FROM  information_schema.tables where table_schema='PUBLIC' and table_name='USERS'";
+			Integer c = jdbcTemplate.queryForObject(sql, Integer.class);
+			if (c == 0) {
+				DataSource ds = jdbcTemplate.getDataSource();
+				ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
+				populator.addScript(new ClassPathResource("init.sql"));
+				populator.populate(ds.getConnection());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 

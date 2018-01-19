@@ -22,4 +22,9 @@ public class UserController {
 	public Object list2() {
 		return userService.list2();
 	}
+	
+	@RequestMapping("/list22")
+	public Object list22() {
+		return userService.list22();
+	}
 }
