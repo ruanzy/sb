@@ -1,4 +1,4 @@
-package com.rz.sb;
+package com.rz.sb.util.ds;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;

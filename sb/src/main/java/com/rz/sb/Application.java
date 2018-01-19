@@ -5,9 +5,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.annotation.Import;
 
+import com.rz.sb.util.ds.DynamicDataSourceRegister;
+
 
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
-@Import({DataSourceHolder.class})
+@Import({DynamicDataSourceRegister.class})
 public class Application
 {
 

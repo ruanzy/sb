@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.rz.sb.TargetDataSource;
+import com.rz.sb.util.ds.TargetDataSource;
 import com.rz.sb.util.sql.SqlLoader;
 import com.rz.sb.util.sql.SqlPara;
 

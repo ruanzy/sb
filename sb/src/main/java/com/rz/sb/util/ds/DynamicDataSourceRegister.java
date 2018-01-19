@@ -1,4 +1,4 @@
-package com.rz.sb;
+package com.rz.sb.util.ds;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -16,8 +16,7 @@ import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.env.Environment;
 import org.springframework.core.type.AnnotationMetadata;
 
-public class DataSourceHolder
-implements ImportBeanDefinitionRegistrar, EnvironmentAware {
+public class DynamicDataSourceRegister implements ImportBeanDefinitionRegistrar, EnvironmentAware {
 
 	private DataSource defaultDataSource;
 	private static Map<String, DataSource> customDataSources = new LinkedHashMap<>();
@@ -57,16 +56,12 @@ implements ImportBeanDefinitionRegistrar, EnvironmentAware {
 	public void registerBeanDefinitions(AnnotationMetadata arg0,
 			BeanDefinitionRegistry registry) {
 		Map<Object, Object> targetDataSources = new HashMap<Object, Object>();
-        // 将主数据源添加到更多数据源中
         targetDataSources.put("dataSource", defaultDataSource);
         DynamicDataSourceHolder.dataSourceIds.add("dataSource");
-        // 添加更多数据源
         targetDataSources.putAll(customDataSources);
         for (String key : customDataSources.keySet()) {
         	DynamicDataSourceHolder.dataSourceIds.add(key);
         }
-
-        // 创建DynamicDataSource
         GenericBeanDefinition beanDefinition = new GenericBeanDefinition();
         beanDefinition.setBeanClass(DynamicDataSource.class);
         beanDefinition.setSynthetic(true);

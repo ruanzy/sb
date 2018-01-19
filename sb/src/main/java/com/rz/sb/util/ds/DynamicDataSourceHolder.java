@@ -1,4 +1,4 @@
-package com.rz.sb;
+package com.rz.sb.util.ds;
 
 import java.util.ArrayList;
 import java.util.List;
