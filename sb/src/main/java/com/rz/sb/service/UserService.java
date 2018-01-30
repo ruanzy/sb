@@ -24,4 +24,8 @@ public class UserService {
 	public List<Map<String, Object>> list2() {
 		return userDao.list2();
 	}
+
+	public Object projects() {
+		return userDao.projects();
+	}
 }

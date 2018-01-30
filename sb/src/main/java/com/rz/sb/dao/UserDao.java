@@ -44,4 +44,10 @@ public class UserDao {
 		List<Map<String, Object>> list = jdbcTemplate1.queryForList(sql, args);
 		return list;
 	}
+
+	public Object projects() {
+		String sql = "select PO_TYPE as id, DESCRIPTION as text from PURCHASE_ORDER_TYPE order by PO_TYPE";
+		List<Map<String, Object>> list = jdbcTemplate2.queryForList(sql);
+		return list;
+	}
 }

@@ -27,4 +27,9 @@ public class UserController {
 	public Object list22() {
 		return userService.list22();
 	}
+	
+	@RequestMapping("/projects")
+	public Object projects() {
+		return userService.projects();
+	}
 }
