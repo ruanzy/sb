@@ -5,28 +5,33 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.rz.sb.util.ds.TargetDataSource;
 import com.rz.sb.util.sql.SqlLoader;
 import com.rz.sb.util.sql.SqlPara;
 
 @Repository
 public class UserDao {
+
 	@Autowired
-	private JdbcTemplate jdbcTemplate;
+	@Qualifier("primaryJdbcTemplate")
+	protected JdbcTemplate jdbcTemplate1;
+
+	@Autowired
+	@Qualifier("secondaryJdbcTemplate")
+	protected JdbcTemplate jdbcTemplate2;
 
 	public List<Map<String, Object>> list() {
 		String sql = "select * from users";
-		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
+		List<Map<String, Object>> list = jdbcTemplate1.queryForList(sql);
 		return list;
 	}
 	
-	@TargetDataSource("d2")
 	public List<Map<String, Object>> list22() {
 		String sql = "select * from users";
-		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
+		List<Map<String, Object>> list = jdbcTemplate1.queryForList(sql);
 		return list;
 	}
 
@@ -36,7 +41,7 @@ public class UserDao {
 		SqlPara sqlPara = SqlLoader.getSql("user.list", params);
 		String sql = sqlPara.getSql();
 		Object[] args = sqlPara.getPara();
-		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args);
+		List<Map<String, Object>> list = jdbcTemplate1.queryForList(sql, args);
 		return list;
 	}
 }
