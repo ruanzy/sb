@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.rz.sb.util.sql.SqlLoader;
-import com.rz.sb.util.sql.SqlPara;
+import com.rz.sb.sql.SqlLoader;
+import com.rz.sb.sql.SqlPara;
 
 @Repository
 public class UserDao {
@@ -49,5 +49,11 @@ public class UserDao {
 		String sql = "select PO_TYPE as id, DESCRIPTION as text from PURCHASE_ORDER_TYPE order by PO_TYPE";
 		List<Map<String, Object>> list = jdbcTemplate2.queryForList(sql);
 		return list;
+	}
+
+	public Map<String, Object> findByAccount(String account) {
+		String sql = "select * from users where username=?";
+		Map<String, Object> u = jdbcTemplate1.queryForMap(sql, account);
+		return u;
 	}
 }

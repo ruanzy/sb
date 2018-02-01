@@ -1,4 +1,4 @@
-package com.rz.sb.util.sql;
+package com.rz.sb.sql;
 
 import java.io.File;
 import java.io.FilenameFilter;

@@ -28,4 +28,8 @@ public class UserService {
 	public Object projects() {
 		return userDao.projects();
 	}
+	
+	public Map<String, Object> findByAccount(String account) {
+		return userDao.findByAccount(account);
+	}
 }

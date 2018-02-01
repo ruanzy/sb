@@ -1,4 +1,4 @@
-package com.rz.sb.util.sql;
+package com.rz.sb.sql;
 
 import com.jfinal.template.Directive;
 import com.jfinal.template.Env;

@@ -1,4 +1,4 @@
-package com.rz.sb.util.sql;
+package com.rz.sb.sql;
 
 import java.util.ArrayList;
 import java.util.List;
