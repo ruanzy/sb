@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title></title>
+<link href="css/base.css" rel="stylesheet" />
+<link href="css/button.css" rel="stylesheet" />
+</head>
+<body class="login_body">
+<div class="login_box">
+	<div class="login_logo"><!--logo--></div>
+    <!--登录框 开始-->
+    <form id="loginForm" id="loginForm" style="position: absolute; top: calc(50% - 40px); left: calc(50% - 120px);">
+	        <div id="error"
+					style="height: 30px;padding: 10px;color: #a94442;background-color: #f2dede;border-color: #ebccd1;visibility: hidden;">
+					<i class="fa fa-warning"></i>&nbsp;&nbsp;<span id="errormsg"></span>
+				</div>
+	<div class="login_form">
+    	<ul>
+          <li>
+          	<label for="username" class="login_label">用户名：</label>
+            <input id="username" name="username" class="login_input" type="text">
+          </li>
+          <li>
+          	<label for="password" class="login_label">密　码：</label>
+            <input id="password" name="password" class="login_input" type="password">
+          </li>
+          <!--<li>
+            
+          	<a class="rem_click" >
+          		<span class="rem_checkbox"></span>
+				<span class="rem_label">记住用户名密码</span>
+            </a>
+            
+          </li>-->
+        </ul>
+        <div class="login_btn">
+        	<span class="btn btn-primary" id="loginbtn">登录</span>
+            <span class="btn btn-default">重置</span>
+        </div>
+        <div class="version_info"><span></span></div>
+    </div>
+    </form>
+    <!--登录框 结束-->
+</div>
+	<script src="static/js/lib/jquery-1.11.0.min.js"></script>
+	<script src="static/js/lib/jquery.md5.js"></script>
+	<script>
+		$(function() {
+			function login() {
+				if (valid()) {
+					var username = $('#username').val();
+					var password = $('#password').val();
+					var _password = $.md5(password);
+					var data = {
+						account : username,
+						password : _password
+					};
+					var url = 'http://localhost:8080/user/login';
+					$.ajax({
+						url : url,
+						type : 'post',
+						data : data,
+						dataType : 'json',
+						success : function(ret) {
+							sessionStorage["token"] = ret.token;
+							sessionStorage["username"] = username;
+							location.href = './';
+						},
+						error : function(ret) {
+							$('#errormsg').text(ret.responseText);
+							$("#error").css("visibility","visible");
+						}
+					});
+				}
+			}
+			function valid() {
+				var username = $('#username').val();
+				var password = $('#password').val();
+				if ($.trim(username).length < 1) {
+					$('#errormsg').text("请输入用户名!");
+					$("#error").css("visibility","visible");
+					$('#username').focus();
+					return false;
+				}
+				if ($.trim(password).length < 1) {
+					$('#errormsg').text("请输入密码!");
+					$("#error").css("visibility","visible");
+					$('#password').focus();
+					return false;
+				}
+				$('#errormsg').text("");
+				$("#error").css("visibility","hidden");
+				return true;
+			}
+			$('#username').focus();
+			$(document).bind("keypress", function(event) {
+				if (event.keyCode == 13) {
+					login();
+				}
+			});
+			$('#loginbtn').on('click', function() {
+				login();
+			});
+		});
+	</script>
+</body>
+</html>

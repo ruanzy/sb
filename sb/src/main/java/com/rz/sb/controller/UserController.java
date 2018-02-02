@@ -1,5 +1,12 @@
 package com.rz.sb.controller;
 
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,4 +39,25 @@ public class UserController {
 	public Object projects() {
 		return userService.projects();
 	}
+	
+	@RequestMapping("/login")
+	public Object login(String account, String password) {
+	    if (account == null || password == null) {
+	        return "Please fill in username and password";
+	    }
+	    Map<String, Object> user = userService.findByAccount(account);
+	    if(user == null){
+	    	return "User " + account + " not found";
+	    }
+	    String pwd = user.get("password").toString();
+	    if (!password.equals(pwd)) {
+	    	return "Invalid login. Please check your name and password";
+	    }
+	    String token = Jwts.builder().setSubject(account).claim("roles", "user").setIssuedAt(new Date())
+        .signWith(SignatureAlgorithm.HS256, "secretkey").compact();
+	    Map<String, Object> m = new HashMap<String, Object>();
+	    m.put("token", token);
+	    
+	    return m;
+    }
 }

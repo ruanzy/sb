@@ -52,8 +52,11 @@ public class UserDao {
 	}
 
 	public Map<String, Object> findByAccount(String account) {
-		String sql = "select * from users where username=?";
-		Map<String, Object> u = jdbcTemplate1.queryForMap(sql, account);
-		return u;
+		String sql = "select * from users where account=?";
+		List<Map<String, Object>> list = jdbcTemplate1.queryForList(sql, account);
+		if(list.size() > 0){
+			return list.get(0);
+		}
+		return null;
 	}
 }

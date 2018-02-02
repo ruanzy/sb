@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link rel="stylesheet" href="fonts/font-awesome.min.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/button.css">
+<link rel="stylesheet" href="css/cc.css">
+<script src="js/require.js" data-main="js/main"></script>
+<style type="text/css">
+.head{
+    padding-right: 25px;
+    padding-left: 15px;
+    border-bottom: 1px solid #e7eaec !important;
+	height: 60px;
+	line-height: 60px;
+position: fixed;
+top: 0;
+    left: 0;
+	right:0;
+	z-index: 1030;
+background-color: #f3f3f4;
+	background-color: #fff;
+}
+
+#sidebar {
+    z-index: 2001;
+    position: fixed;
+	top: 0px;
+	bottom: 0;
+    width: 220px;
+background-color: transparent;
+background-color: #2f4050;
+}
+.navbar-top-links li {
+    display: inline-block;
+	padding: 0 10px;
+}
+.main{
+margin: 0 0 0 220px;
+box-shadow: 0 0 8px rgba(0, 0, 0, 0.1), 0 0 256px rgba(255, 255, 255, .3);
+background: #fff;
+position: absolute;
+top: 60px;
+bottom: 0;
+left: 0;
+right: 0;
+overflow-y: scroll;
+}
+</style>
+</head>
+<body>
+	<div id="wrapper">
+		<div class="head" id="head">
+			<div class="brand" style="width: 220px;float: left;">
+				<img alt="image" class="img-circle" src="images/head.png"><strong
+					style="font-size:1.2em;color: #777777">JOne开发指南</strong>
+			</div>
+			<a id="sidebarsw" class="btn btn-primary" href="#"><i
+				class="fa fa-bars"></i> </a>
+			<ul class="nav navbar-top-links pull-right">
+				<li><span class="welcome-message" style="color: #1ab394;"><span id='loginUser'></span>,
+						欢迎您</span></li>
+				<li id="exit"><a style="color: #1ab394;"><i
+						class="fa fa-power-off"></i> 退出</a></li>
+			</ul>
+		</div>
+		<div id="sidebar" class="sidebar-nav"></div>
+		<div class="main" id="container" style="padding: 20px;"></div>
+	</div>
+</body>
+</html>
