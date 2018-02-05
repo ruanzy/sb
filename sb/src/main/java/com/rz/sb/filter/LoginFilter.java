@@ -34,7 +34,7 @@ public class LoginFilter implements Filter {
 		final HttpServletRequest request = (HttpServletRequest) req;
 		final HttpServletResponse response = (HttpServletResponse) res;
 		String uri = request.getRequestURI();
-		String pattern = ".*\\.(html|ico|js|css|png|jpg|woff|woff2|ttf)$";
+		String pattern = ".*\\.(html|ico|js|css|png|jpg|woff|woff2|ttf|properties)$";
 		boolean isMatch = Pattern.matches(pattern, uri);
 		boolean noFilter = isMatch || uri.equals("/user/login") || uri.equals("/");
 		if (noFilter) {
@@ -51,6 +51,7 @@ public class LoginFilter implements Filter {
 			final Claims claims = Jwts.parser().setSigningKey("secretkey")
 					.parseClaimsJws(token).getBody();
 			request.setAttribute("claims", claims);
+			chain.doFilter(req, res);
 		} catch (final SignatureException e) {
 			response.sendError(403, "Invalid token");
 		}

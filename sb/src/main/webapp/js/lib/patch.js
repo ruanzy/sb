@@ -20,7 +20,7 @@ define(['toastr' ], function(toastr) {
 	};
 	$.i18n.properties({
 		name : 'i18n',
-		path : 'static/i18n/',
+		path : 'i18n/',
 		mode : 'map',
 		language : localStorage.getItem('lang') || 'zh',
 		//cache : true,
@@ -77,6 +77,7 @@ define(['toastr' ], function(toastr) {
 		}
 		xhr.setRequestHeader('Authorization', sessionStorage.token);
 	});
+	/**
 	$.ajax({
 		url : "user/getPermission",
 		type : 'post',
@@ -86,7 +87,7 @@ define(['toastr' ], function(toastr) {
 		success : function(result) {
 			sessionStorage.setItem('permission', result);
 		}
-	});
+	});**/
 	$.fn.serializeObject = function() {
 	    var o = {};
 	    var a = this.serializeArray();
