@@ -63,11 +63,11 @@
 							var id = this.id;
 							var click = this.click;
 							var arr = new Array();
-							arr.push('<a');
+							arr.push('<button');
 							if(id){
 								arr.push(' id="', id, '"');
 							}
-							arr.push(' class="btn ', cls, '">', text, '</a>');
+							arr.push(' class="btn ', cls, '">', text, '</button>');
 							var btn = $(arr.join('')).on('click', function(){
 								click.call(wrapper, arguments);
 							});

@@ -21,33 +21,41 @@
     cursor: move;
 }
 .rui-dialog .rui-dialog-titlebar {
-    padding: .7em;
+    height: 46px;
+    line-height: 46px;
+    padding-left: 20px;
     position: relative;
     white-space: nowrap;
     /* border-bottom: 1px solid #e8e8e8; */
     /* background-color: #fbfbfb; */
+    background-color: #098cc2;
 }
 .rui-dialog .rui-dialog-title {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    font-weight: bold;
     cursor: default;
-    color: #777777;
+    color: #fff;
 }
 .rui-dialog .rui-dialog-titlebar-close {
+	display: block;
     position: absolute;
+    z-index: 1;
     right: 0;
-	/* top: 50%; */
-    width: 20px;
-    margin: -10px 0 0 0;
-    padding: 1px;
-    height: 20px;
-	color: #000;
-	cursor: pointer;
-	font-weight: bold;
-	opacity: .4;
-	font-size: 1.3em;
+    top: 0;
+    width: 46px;
+    height: 46px;
+    text-align: center;
+    cursor: pointer;
+    color: #fff;
+}
+.rui-dialog .rui-dialog-titlebar-close i{
+	display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin-top: 11px;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAGXRFW…NkOiiCiKaRTNNkSvOMdhOfRjSH3MQlzzhao41aQDEACDAAkcb7Ue21oJQAAAAASUVORK5CYII=) no-repeat 0 0;
+    opacity: .6;
 }
 .rui-dialog .rui-dialog-buttonpane {
     text-align: left;
