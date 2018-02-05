@@ -13,7 +13,7 @@ public class UserService {
 	@Autowired
 	private UserDao userDao;
 
-	public List<Map<String, Object>> list() {
+	public Map<String, Object> list() {
 		return userDao.list();
 	}
 	

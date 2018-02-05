@@ -69,8 +69,8 @@ define(['util'], function(util){
 			$('#datalist').grid({
 				url : 'user/list',
 				columns: [
-					{ header: util.i18n('SYS_USER_USERNAME'), field: 'username'},
-					{ header: util.i18n('SYS_USER_REGTIME'), field: 'regtime', align: 'center', width: 200},
+					{ header: util.i18n('SYS_USER_USERNAME'), field: 'ACCOUNT'},
+					{ header: util.i18n('SYS_USER_REGTIME'), field: 'REGTIME', align: 'center', width: 200},
 					{ header: util.i18n('OPERATE'), field: 'op', render : opRender, align: 'center', width: 200}
 				]
 			});

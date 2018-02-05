@@ -44,13 +44,13 @@ define([ 'util', 'toastr' ], function(util, toastr) {
 			$('#datalist').grid({
 				url : 'user/list',
 				columns: [
-					{ header: util.i18n('SYS_USER_USERNAME'), field: 'username'},
+					{ header: util.i18n('SYS_USER_USERNAME'), field: 'ACCOUNT'},
 					{ header: '部门', field: 'depart', render : deptRender},
-					{ header: util.i18n('SYS_USER_REGTIME'), field: 'regtime', align: 'center', width: 200},
+					{ header: util.i18n('SYS_USER_REGTIME'), field: 'REGTIME', align: 'center', width: 200},
 					{ header: util.i18n('OPERATE'), field: 'op', render : opRender, align: 'center', width: 200}
 				]
 			});
-			$('#datapager').pagination({
+			$('#datapager2').pagination({
 				url : 'user/list',
 				callback: function(data){
 					data.deptRender = deptRender;
@@ -133,7 +133,8 @@ define([ 'util', 'toastr' ], function(util, toastr) {
 							data: {
 								simpleData: {
 									enable: true,
-									pIdKey: "pid"
+									IdKey: "ID",
+									pIdKey: "PID"
 								}
 							},
 							callback: {

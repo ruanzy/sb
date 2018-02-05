@@ -20,7 +20,7 @@ public class DeptDao {
 	protected JdbcTemplate jdbcTemplate2;
 
 	public List<Map<String, Object>> tree() {
-		String sql = "select * from dept";
+		String sql = "select id as id, pid as pid, name as text from dept";
 		List<Map<String, Object>> list = jdbcTemplate1.queryForList(sql);
 		return list;
 	}
