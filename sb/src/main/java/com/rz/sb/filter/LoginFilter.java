@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Component;
 
-@Component
 @WebFilter(urlPatterns = "/*", filterName = "LoginFilter")
 public class LoginFilter implements Filter {
 

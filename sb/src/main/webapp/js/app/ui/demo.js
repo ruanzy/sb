@@ -36,7 +36,7 @@ define([ 'util', 'toastr' ], function(util, toastr) {
 			function getMap(arr){
 				var map = {};
 	        	for(var k in arr){
-	        		var id = arr[k].id;
+	        		var id = arr[k].ID;
 	        		map[id] = arr[k];
 	        	}
 	        	return map;
@@ -44,7 +44,7 @@ define([ 'util', 'toastr' ], function(util, toastr) {
 			$('#datalist').grid({
 				url : 'user/list',
 				columns: [
-					{ header: util.i18n('SYS_USER_USERNAME'), field: 'ACCOUNT'},
+					{ header: util.i18n('SYS_USER_USERNAME'), field: 'NAME'},
 					{ header: '部门', field: 'depart', render : deptRender},
 					{ header: util.i18n('SYS_USER_REGTIME'), field: 'REGTIME', align: 'center', width: 200},
 					{ header: util.i18n('OPERATE'), field: 'op', render : opRender, align: 'center', width: 200}
@@ -64,13 +64,13 @@ define([ 'util', 'toastr' ], function(util, toastr) {
 			});
 			function deptRender(v, r){
 				var arr = [];
-				var depid = r.depart;
+				var depid = r.DEPART;
 				var node = deptmap[depid];
-				var level = node.deep;
-				arr.push(node.name);
+				var level = node.DEEP;
+				arr.push(node.NAME);
 	        	for(var k = level; k > 0; k--){
-	        		node = deptmap[node.pid];
-	        		var name = node.name;
+	        		node = deptmap[node.PID];
+	        		var name = node.NAME;
 	        		arr.push(name);
 	        	}
 	        	return arr.reverse().join('/');
@@ -79,10 +79,10 @@ define([ 'util', 'toastr' ], function(util, toastr) {
 				return (v == 1)? ('<label class="label label-success">正常 </label>'): ('<label class="label label-danger">注销</label>');
 			}
 			function opRender(v, r){
-				var state = r.state;
-				var name = r.username;
+				var status = r.STATUS;
+				var name = r.NAME;
 				var op = new Array();
-				if(state == 1){
+				if(status == 1){
 					var setrole = $('<a href="javascript:void(0);">' + util.i18n('SYS_USER_SETROLE') + '</a>');
 					setrole.on('click', function(){
 						me.setRole(name);
@@ -131,9 +131,12 @@ define([ 'util', 'toastr' ], function(util, toastr) {
 			    open: function(){
 					var setting = {
 							data: {
+								key: {
+									name: "NAME",
+								},
 								simpleData: {
 									enable: true,
-									IdKey: "ID",
+									idKey: "ID",
 									pIdKey: "PID"
 								}
 							},
@@ -141,10 +144,11 @@ define([ 'util', 'toastr' ], function(util, toastr) {
 								onClick: function(event, treeId, treeNode) {
 									event.stopPropagation();
 									if(!treeNode.isParent){							
-										var id = treeNode.id;
-										var name = treeNode.name;
+										var id = treeNode.ID;
+										var name = treeNode.NAME;
 										$('#dept').val(name);
 										$('#deptid').val(id);
+										$('#menuContent').hide();
 									}else{
 										alert('只能选择最后一级节点');
 									}
@@ -217,7 +221,7 @@ define([ 'util', 'toastr' ], function(util, toastr) {
 					data: data,
 					dataType: 'json',
 			        success: function(result){
-			        	ret = result;
+			        	ret = !result;
 					}
 				});
 			    return ret;
@@ -230,7 +234,7 @@ define([ 'util', 'toastr' ], function(util, toastr) {
 						required: true,
 						minlength: 5,
 						pattern: /^[a-zA-Z0-9\u4e00-\u9fa5_]{5,10}$/,
-						unique: "user/validname"
+						unique: "user/exist"
 					},
 					password: {
 						required: true,
@@ -331,7 +335,7 @@ define([ 'util', 'toastr' ], function(util, toastr) {
 				},
 				error: function(){
 					d.close();
-					toastr.warn(util.i18n('SYS_USER_RESETPWD_FAIL'), '提示');
+					toastr.warning(util.i18n('SYS_USER_RESETPWD_FAIL'), '提示');
 				}
 			});
 		},
@@ -383,11 +387,11 @@ define([ 'util', 'toastr' ], function(util, toastr) {
 			var mm = v.form();
 			return mm;
 		},
-		del: function(username){
+		del: function(name){
         	$.confirm(util.i18n('SYS_USER_DELETE_CONFIRM'), function(v){
         		if(v){
     				var url = "user/del";
-    				var param = {username: username};
+    				var param = {id: name};
     				$.ajax({
     					url:url,
     					type: 'post',
@@ -401,10 +405,10 @@ define([ 'util', 'toastr' ], function(util, toastr) {
         		}
         	});
 		},
-		setRole: function(username){
+		setRole: function(name){
 			var me = this;
 			var url = "user/getRoles";
-			var param = {username: username};
+			var param = {id: name};
 			var data = {list: []};
 			$.ajax({
 				url:url,
@@ -432,7 +436,7 @@ define([ 'util', 'toastr' ], function(util, toastr) {
 							_roles.each(function(){    
 								roles.push($(this).val());    
 							});    
-							me.saveRole(username, this);
+							me.saveRole(name, this);
 			             }
 			         },
 			         {
@@ -446,19 +450,19 @@ define([ 'util', 'toastr' ], function(util, toastr) {
 			    	$('input').iCheck({
 			    		checkboxClass: 'icheckbox_square-green',
 			    		radioClass: 'iradio_square-green',
-			    		increaseArea: '20%' // optional
+			    		increaseArea: '20%'
 			    	});		    	
 			    }
         	});
 		},
-		saveRole: function(username, d){
+		saveRole: function(name, d){
 			var roles = [];
 			var _roles = $('#roles').find('input[name="role"]:checked');
 			_roles.each(function(){    
 				roles.push($(this).val());    
 			});
-			var url = "user/setRole";
-			var param = {username: username, roles: roles.join()};
+			var url = "user/setRoles";
+			var param = {id: name, roles: roles.join()};
 			$.ajax({
 				url:url,
 				type: 'post',

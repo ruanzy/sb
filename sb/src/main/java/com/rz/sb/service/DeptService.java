@@ -16,4 +16,23 @@ public class DeptService {
 	public List<Map<String, Object>> tree() {
 		return deptDao.tree();
 	}
+
+	public void add(Map<String, Object> param) {
+		deptDao.add(param);
+	}
+
+	public List<Map<String, Object>> getPermission(String id) {
+		return deptDao.getPermission(id);
+	}
+
+	public void setPermission(String deptid, String permissions) {
+		deptDao.setPermission(deptid, permissions);
+	}
+
+	public void del(String id) {
+		boolean isByUser = deptDao.isByUser(id);
+		if(!isByUser){
+			deptDao.del(id);
+		}
+	}
 }

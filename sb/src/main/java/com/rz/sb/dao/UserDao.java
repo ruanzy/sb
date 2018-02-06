@@ -1,5 +1,8 @@
 package com.rz.sb.dao;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.DigestUtils;
 
 import com.rz.sb.sql.SqlLoader;
 import com.rz.sb.sql.SqlPara;
@@ -39,20 +43,51 @@ public class UserDao {
 		return ret;
 	}
 	
-	public List<Map<String, Object>> list22() {
-		String sql = "select * from users";
-		List<Map<String, Object>> list = jdbcTemplate1.queryForList(sql);
-		return list;
+	public void add(Map<String, Object> o)
+	{
+		Object name = o.get("name");
+		Object password = o.get("password");
+		String _password = DigestUtils.md5DigestAsHex(password.toString().getBytes());
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String time = df.format(new Date());
+		Object deptid = o.get("deptid");
+		String sql = "insert into users(name,password,depart,status,regtime) values(?,?,?,1,?)";
+		jdbcTemplate1.update(sql, name, _password, deptid, time);
+	}
+	
+	public boolean exist(String name)
+	{
+		String sql = "select count(*) from users where name=?";
+		Integer c = jdbcTemplate1.queryForObject(sql, new Object[]{ name }, Integer.class);
+		return c > 0;
+	}
+	
+	public void del(String id)
+	{
+		String sql1 = "delete from userrole where userid = ?";
+		String sql2 = "delete from users where name = ?";
+		jdbcTemplate1.update(sql1, id);
+		jdbcTemplate1.update(sql2, id);
+	}
+	
+	public void setRoles(String id, String roles)
+	{
+		String[] arr = roles.split(",");
+		String sql1 = "delete from userrole where userid = ?";
+		String sql2 = "insert into userrole values(?, ?)";
+		jdbcTemplate1.update(sql1, id);
+		List<Object[]> batchArgs = new ArrayList<Object[]>();
+		for (String str : arr)
+		{
+			batchArgs.add(new Object[]{ id, str });
+		}
+		jdbcTemplate1.batchUpdate(sql2, batchArgs);
 	}
 
-	public List<Map<String, Object>> list2() {
-		Map<String, Object> params = new HashMap<String, Object>();
-		params.put("name", "sam");
-		SqlPara sqlPara = SqlLoader.getSql("user.list", params);
-		String sql = sqlPara.getSql();
-		Object[] args = sqlPara.getPara();
-		List<Map<String, Object>> list = jdbcTemplate1.queryForList(sql, args);
-		return list;
+	public List<Map<String, Object>> getRoles(String id)
+	{
+		String sql = "select r.id, r.name, exists (select 1 from userrole where userid=? and roleid=r.id) as checked from role r";
+		return jdbcTemplate1.queryForList(sql, id);
 	}
 
 	public Object projects() {
@@ -61,12 +96,19 @@ public class UserDao {
 		return list;
 	}
 
-	public Map<String, Object> findByAccount(String account) {
-		String sql = "select * from users where account=?";
-		List<Map<String, Object>> list = jdbcTemplate1.queryForList(sql, account);
+	public Map<String, Object> findByName(String name) {
+		String sql = "select * from users where name=?";
+		List<Map<String, Object>> list = jdbcTemplate1.queryForList(sql, name);
 		if(list.size() > 0){
 			return list.get(0);
 		}
 		return null;
+	}
+	
+	public void resetpwd(String id, String password)
+	{
+		String sql = "update users set password=? where name=?";
+		String _password = DigestUtils.md5DigestAsHex(password.toString().getBytes());
+		jdbcTemplate1.update(sql, _password, id);
 	}
 }

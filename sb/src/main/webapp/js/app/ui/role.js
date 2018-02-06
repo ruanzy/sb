@@ -5,133 +5,6 @@ define(['util', 'toastr', 'echarts'], function(util, toastr, echarts){
 			util.render('html/rolemgr.html', 'container');
 			$('#add').on('click', function(){me.add();});
 			me.list();
-
-		  
-		    var chart = echarts.init(document.getElementById('charts1'), 'macarons');
-		    function  showChart(data){
-		    	chart.showLoading({    
-                    text : "图表数据正在努力加载..."    
-                }); 
-		    	var hmucommitted = data.hmucommitted;
-		    	var hmuused = data.hmuused;
-		    	var timestamps = [];
-		    	var values1 = [];
-		    	var values2 = [];
-		    	var size = hmuused.length;
-		    	var num = (size - 1) * 5 * 1000;
-		    	var t = new Date().getTime() - num;
-		    	for (var i = 0; i < size; i++) {
-		    		var d = new Date(t);
-		    		var str = util.dateFormat(d, 'HH:mm:ss');
-		    		timestamps.push(str);
-		    		values1.push(hmucommitted[i]);
-		    		values2.push(hmuused[i]);
-		    		t += 5 * 1000;
-		    	}
-		        var option = {
-		        		color: ['#6495ed','#2ec7c9','#6495ed',
-		        	            '#ff69b4','#ba55d3','#cd5c5c','#ffa500','#40e0d0',
-		        	            '#1e90ff','#ff6347','#7b68ee','#00fa9a','#ffd700',
-		        	            '#6699FF','#ff6666','#3cb371','#b8860b','#30e0e0'],
-			                legend: {
-			                	data:['堆内存已使用', '堆内存大小']
-			                },
-		            tooltip: {
-		              trigger: 'axis',
-		              axisPointer: {
-		                animation: false
-		              }
-		            },
-		            calculable : true,
-		            xAxis: {
-		              type: 'category',
-		  			  data: timestamps,
-		  			  boundaryGap: false,
-			  			axisLine: {
-			  				lineStyle: {
-			  					color: '#777'
-			  				}
-			  			},
-		                splitLine: {
-		                  show: true
-		                }
-		            },
-		            yAxis: {
-		              type: 'value',
-		              splitNumber: 3,
-		              boundaryGap: [0, '100%'],
-						axisLine: {
-							lineStyle: {
-								color: '#777' 
-							}
-						},
-		              splitArea : {show : true},
-		              splitLine: {
-		                show: true
-		              }
-		            },
-		            series: [{
-			              name: '堆内存大小',
-			              type: 'line',
-			              showSymbol: false,
-			              hoverAnimation: false,
-			              data: values1
-			            },{
-				              name: '堆内存已使用',
-				              type: 'line',
-				              showSymbol: false,
-				              hoverAnimation: false,
-				              data: values2
-				            }]
-		          }
-				chart.setOption(option);
-		        chart.hideLoading();
-		        update();
-		    }
-	        function  initChart(){
-				$.ajax({
-					url: 'monitor/memery',
-					type: 'post',
-					async: false,
-					data: {point: 200},
-					dataType: 'json',
-			        success: function(data){
-			        	showChart(data);
-					}
-				});
-	        }
-	        initChart();
-	        function update(){
-		        var timer = setInterval(function () {
-		        	var d = new Date();
-					$.ajax({
-						url: 'monitor/memery',
-						type: 'post',
-						async: false,
-						data: {point: 1},
-						dataType: 'json',
-				        success: function(data){
-					    	var hmucommitted = data.hmucommitted[0];
-					    	var hmuused = data.hmuused[0];
-					    	var hmumax = data.hmumax[0];;
-				        	var opt = chart.getOption();
-					    	var str = util.dateFormat(d, 'HH:mm:ss');
-					    	var v1 = hmucommitted;
-					    	var v2 = hmuused;
-					    	$('#mem_max').text(hmumax);
-					    	$('#mem_committed').text(hmucommitted);
-					    	$('#mem_used').text(hmuused);
-					    	opt.xAxis[0].data.shift();
-					    	opt.series[0].data.shift();
-					    	opt.series[1].data.shift();
-					    	opt.xAxis[0].data.push(str);
-					    	opt.series[0].data.push(v1);
-					    	opt.series[1].data.push(v2);
-					    	chart.setOption(opt);
-						}
-					});
-		        }, 5000);
-        	}
 		},
 		list: function(){
 			var me = this;
@@ -139,17 +12,17 @@ define(['util', 'toastr', 'echarts'], function(util, toastr, echarts){
 				url : 'role/list',
 				pagesize : 10,
 				columns: [
-					{ header: util.i18n('SYS_ROLE_ROLENAME'), field: 'name'},
+					{ header: util.i18n('SYS_ROLE_ROLENAME'), field: 'NAME'},
 					{ header: util.i18n('OPERATE'), field: 'op', render : opRender}
 				]
 			});
 			function nameRender(v, r){
-				var name = r.name;
+				var name = r.NAME;
 				var namecode = r.namecode;
 				return util.i18n('SYS_ROLE_' + namecode);
 			}
 			function opRender(v, r){
-				var id = r.id;
+				var id = r.ID;
 				var op = new Array();
 				var openPermission = $('<a href="javascript:void(0);">' + util.i18n('SYS_ROLE_SETPERMISSION') + '</a>');
 				openPermission.on('click', function(){
@@ -226,7 +99,7 @@ define(['util', 'toastr', 'echarts'], function(util, toastr, echarts){
 					data: data,
 					dataType: 'json',
 			        success: function(result){
-			        	ret = result;
+			        	ret = !result;
 					}
 				});
 			    return ret;
@@ -239,7 +112,7 @@ define(['util', 'toastr', 'echarts'], function(util, toastr, echarts){
 						required: true,
 						minlength: 2,
 						pattern: /^[a-zA-Z0-9\u4e00-\u9fa5_]{2,10}$/,
-						unique: "role/validname"
+						unique: "role/exist"
 					}
 				},
 				messages: {
@@ -321,10 +194,14 @@ define(['util', 'toastr', 'echarts'], function(util, toastr, echarts){
 					chkboxType: { "Y" : "ps", "N" : "ps" }
 				},
 				data: {
+					key: {
+						name: "NAME",
+						checked: "CHECKED"
+					},
 					simpleData: {
 						enable:true,
-						idKey: "id",
-						pIdKey: "pid",
+						idKey: "ID",
+						pIdKey: "PID",
 						rootPId: ""
 					}
 				},
@@ -362,7 +239,7 @@ define(['util', 'toastr', 'echarts'], function(util, toastr, echarts){
 			var nodes = treeObj.getCheckedNodes(true);
 			var ids = [];
 			for(var k in nodes){
-				ids.push(nodes[k].id);
+				ids.push(nodes[k].ID);
 			}
 			var url = "role/setPermission";
 			var param = {roleid: roleid, permissions: ids.join()};

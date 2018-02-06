@@ -7,40 +7,46 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.rz.sb.service.DeptService;
+import com.rz.sb.service.RoleService;
 import com.rz.sb.util.Result;
 
-@RequestMapping("dept")
+@RequestMapping("role")
 @RestController
-public class DeptController {
+public class RoleController {
 	@Autowired
-	private DeptService deptService;
+	private RoleService roleService;
 
-	@RequestMapping("/tree")
+	@RequestMapping("/list")
 	public Object list() {
-		return deptService.tree();
+		return roleService.list();
 	}
 	
 	@RequestMapping("/add")
 	public Object add(@RequestParam Map<String, Object> param) {
-		deptService.add(param);
+		roleService.add(param);
 		return new Result(true, "add");
+	}
+	
+	@RequestMapping("/exist")
+	public boolean exist(String rolename)
+	{
+		return roleService.exist(rolename);
 	}
 	
 	@RequestMapping("/del")
 	public Object del(String id) {
-		deptService.del(id);
+		roleService.del(id);
 		return new Result(true, "del");
 	}
 	
 	@RequestMapping("/getPermission")
-	public Object getPermission(String id) {
-		return deptService.getPermission(id);
+	public Object getPermission(String roleid) {
+		return roleService.getPermission(roleid);
 	}
 	
 	@RequestMapping("/setPermission")
-	public Object setPermission(String id, String permissions) {
-		deptService.setPermission(id, permissions);
+	public Object setPermission(String roleid, String permissions) {
+		roleService.setPermission(roleid, permissions);
 		return new Result(true, "setPermission");
 	}
 }

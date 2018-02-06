@@ -17,19 +17,41 @@ public class UserService {
 		return userDao.list();
 	}
 	
-	public List<Map<String, Object>> list22() {
-		return userDao.list22();
+	public void add(Map<String, Object> o)
+	{
+		userDao.add(o);
+	}
+	
+	public boolean exist(String name)
+	{
+		return userDao.exist(name);
+	}
+	
+	public void del(String id)
+	{
+		userDao.del(id);
+	}
+	
+	public void setRoles(String id, String roles)
+	{
+		userDao.setRoles(id, roles);
 	}
 
-	public List<Map<String, Object>> list2() {
-		return userDao.list2();
+	public List<Map<String, Object>> getRoles(String id)
+	{
+		return userDao.getRoles(id);
 	}
 
 	public Object projects() {
 		return userDao.projects();
 	}
 	
-	public Map<String, Object> findByAccount(String account) {
-		return userDao.findByAccount(account);
+	public Map<String, Object> findByName(String name) {
+		return userDao.findByName(name);
+	}
+	
+	public void resetpwd(String id, String password)
+	{
+		userDao.resetpwd(id, password);
 	}
 }

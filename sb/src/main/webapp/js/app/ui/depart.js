@@ -4,24 +4,32 @@ define(['util', 'toastr'], function(util, toastr){
 			var me = this;
 			util.render('html/depart.html', 'container');
 			me.tree();
-			me.loadpermission();
-				$('#addbtn').on('click', function(){me.add();});
-				$('#delbtn').on('click', function(){me.del();});
-				$('#savebtn').on('click', function(){me.setPermission();});
+        	var zTreeObj = $.fn.zTree.getZTreeObj("treeDemo");
+        	var node = zTreeObj.getNodeByParam('ID', 7);
+        	zTreeObj.selectNode(node);
+			me.loadpermission(7);
+			$('#addbtn').on('click', function(){me.add();});
+			$('#delbtn').on('click', function(){me.del();});
+			$('#savebtn').on('click', function(){me.setPermission();});
 
 		},
 		tree: function(){
 			var me = this;
 			var setting = {
 					data: {
+						key: {
+							name: 'NAME'
+						},
 						simpleData: {
 							enable: true,
-							pIdKey: "pid"
+							idKey: "ID",
+							pIdKey: "PID"
 						}
 					},
 					callback: {
 						onClick: function(event, treeId, treeNode) {
-							me.loadpermission();
+							var id = treeNode.ID;
+							me.loadpermission(id);
 						}
 					}
 				};
@@ -32,10 +40,10 @@ define(['util', 'toastr'], function(util, toastr){
 					dataType: 'json',
 			        success: function(result){
 			        	$.fn.zTree.init($("#treeDemo"), setting, result);
-			        	var zTreeObj = $.fn.zTree.getZTreeObj("treeDemo");
-			        	var node = zTreeObj.getNodeByParam('id', 3);
-			        	zTreeObj.selectNode(node);
-			        	zTreeObj.setting.callback.onClick(null, zTreeObj.setting.treeId, node);
+//			        	var zTreeObj = $.fn.zTree.getZTreeObj("treeDemo");
+//			        	var node = zTreeObj.getNodeByParam('ID', 3);
+//			        	zTreeObj.selectNode(node);
+//			        	zTreeObj.setting.callback.onClick(null, zTreeObj.setting.treeId, node);
 					}
 				});
 		},
@@ -145,7 +153,7 @@ define(['util', 'toastr'], function(util, toastr){
 				}
 			});
 		},
-		loadpermission: function(roleid){
+		loadpermission: function(id){
 			var setting = {
 				view: {
 					dblClickExpand: false,
@@ -158,11 +166,14 @@ define(['util', 'toastr'], function(util, toastr){
 					chkboxType: { "Y" : "ps", "N" : "ps" }
 				},
 				data: {
+					key: {
+						name: 'NAME',
+						checked: 'CHECKED'
+					},
 					simpleData: {
-						enable:true,
-						idKey: "id",
-						pIdKey: "pid",
-						rootPId: ""
+						enable: true,
+						idKey: "ID",
+						pIdKey: "PID"
 					}
 				},
 				callback: {
@@ -178,9 +189,6 @@ define(['util', 'toastr'], function(util, toastr){
 				}
 			};
 			var url = "dept/getPermission";
-			var zTreeObj = $.fn.zTree.getZTreeObj("treeDemo");
-        	var selectedNode = zTreeObj.getSelectedNodes()[0];
-			var id = selectedNode.id;
 			var param = {id: id};
 			$.ajax({
 				url:url,
@@ -207,9 +215,9 @@ define(['util', 'toastr'], function(util, toastr){
 			}
 			var zTreeObj = $.fn.zTree.getZTreeObj("treeDemo");
         	var selectedNode = zTreeObj.getSelectedNodes()[0];
-			var deptid = selectedNode.id;
+			var id = selectedNode.id;
 			var url = "dept/setPermission";
-			var param = {deptid: deptid, permissions: ids.join()};
+			var param = {id: id, permissions: ids.join()};
 			$.ajax({
 				url:url,
 				type: 'post',
