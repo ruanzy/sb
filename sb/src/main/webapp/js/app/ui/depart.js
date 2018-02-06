@@ -75,8 +75,8 @@ define(['util', 'toastr'], function(util, toastr){
         	    open: function(){
 		        	var zTreeObj = $.fn.zTree.getZTreeObj("treeDemo");
 		        	var selectedNode = zTreeObj.getSelectedNodes()[0];
-					var id = selectedNode.id;
-					var name = selectedNode.name;
+					var id = selectedNode.ID;
+					var name = selectedNode.NAME;
 					var level = selectedNode.level;
 					$('#addform #pid').val(id);
 					$('#addform #pname').val(name);
@@ -211,11 +211,11 @@ define(['util', 'toastr'], function(util, toastr){
 			var nodes = treeObj.getCheckedNodes(true);
 			var ids = [];
 			for(var k in nodes){
-				ids.push(nodes[k].id);
+				ids.push(nodes[k].ID);
 			}
 			var zTreeObj = $.fn.zTree.getZTreeObj("treeDemo");
         	var selectedNode = zTreeObj.getSelectedNodes()[0];
-			var id = selectedNode.id;
+			var id = selectedNode.ID;
 			var url = "dept/setPermission";
 			var param = {id: id, permissions: ids.join()};
 			$.ajax({
@@ -224,7 +224,7 @@ define(['util', 'toastr'], function(util, toastr){
 				data: param,
 				dataType: 'json',
 		        success: function(result){
-		        	me.loadpermission();
+		        	me.loadpermission(id);
 				}
 			});
 		},
@@ -344,7 +344,7 @@ define(['util', 'toastr'], function(util, toastr){
 			var me = this;
         	var zTreeObj = $.fn.zTree.getZTreeObj("treeDemo");
         	var selectedNode = zTreeObj.getSelectedNodes()[0];
-			var id = selectedNode.id;
+			var id = selectedNode.ID;
 			//var name = selectedNode.name;
         	var d = $.confirm(util.i18n('SYS_USER_DELETE_CONFIRM'), function(v){
 				if(v) {
