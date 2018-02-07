@@ -1,7 +1,5 @@
 package com.rz.sb.filter;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureException;
 
 import java.io.IOException;
@@ -17,7 +15,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.stereotype.Component;
+import com.rz.sb.util.TokenUtil;
 
 @WebFilter(urlPatterns = "/*", filterName = "LoginFilter")
 public class LoginFilter implements Filter {
@@ -47,9 +45,10 @@ public class LoginFilter implements Filter {
 		}
 		final String token = authHeader;
 		try {
-			final Claims claims = Jwts.parser().setSigningKey("secretkey")
-					.parseClaimsJws(token).getBody();
-			request.setAttribute("claims", claims);
+			boolean v = TokenUtil.valid(token);
+			if(!v){
+				response.sendError(401, "Token expiration");
+			}
 			chain.doFilter(req, res);
 		} catch (final SignatureException e) {
 			response.sendError(403, "Invalid token");

@@ -54,7 +54,7 @@
 					var password = $('#password').val();
 					var _password = $.md5(password);
 					var data = {
-						account : username,
+						name : username,
 						password : _password
 					};
 					var url = 'http://localhost:8080/user/login';

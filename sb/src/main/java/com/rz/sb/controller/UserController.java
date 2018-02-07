@@ -1,10 +1,7 @@
 package com.rz.sb.controller;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.swagger.annotations.ApiOperation;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rz.sb.service.UserService;
 import com.rz.sb.util.Result;
+import com.rz.sb.util.TokenUtil;
 
 @RequestMapping("user")
 @RestController
@@ -77,11 +75,9 @@ public class UserController {
 	    if (!password.equals(pwd)) {
 	    	return "Invalid login. Please check your name and password";
 	    }
-	    String token = Jwts.builder().setSubject(name).claim("roles", "user").setIssuedAt(new Date())
-        .signWith(SignatureAlgorithm.HS256, "secretkey").compact();
+	    String token = TokenUtil.create(name);
 	    Map<String, Object> m = new HashMap<String, Object>();
 	    m.put("token", token);
-	    
 	    return m;
     }
 	
