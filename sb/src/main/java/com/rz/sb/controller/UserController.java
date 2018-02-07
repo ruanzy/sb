@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rz.sb.Log;
 import com.rz.sb.service.UserService;
 import com.rz.sb.util.Result;
 import com.rz.sb.util.TokenUtil;
@@ -23,12 +24,14 @@ public class UserController {
 
 	@ApiOperation(value="用户列表",notes = "查询用户列表", code = 200, produces = "application/json")
 	@PostMapping("/list")
+	@Log("查询用户列表")
 	public Object list() {
 		return userService.list();
 	}
 	
 	@ApiOperation(value="增加用户",notes = "增加用户", code = 200, produces = "application/json")
 	@PostMapping("/add")
+	@Log("增加用户")
 	public Object add(@RequestParam Map<String, Object> param) {
 		userService.add(param);
 		return new Result(true, "add");

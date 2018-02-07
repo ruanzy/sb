@@ -21,7 +21,7 @@ public class DeptDao {
 	protected JdbcTemplate jdbcTemplate2;
 
 	public List<Map<String, Object>> tree() {
-		String sql = "select * from dept";
+		String sql = "select * from dept order by pid asc";
 		List<Map<String, Object>> list = jdbcTemplate1.queryForList(sql);
 		return list;
 	}
